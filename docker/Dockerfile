@@ -1,8 +1,8 @@
 FROM python:3.12-slim-bookworm AS vosk-native
 ARG VOSK_NATIVE_VERSION=0.3.45
-RUN pip install --no-cache-dir --no-deps "vosk==${VOSK_NATIVE_VERSION}" \
+RUN pip download --no-cache-dir --no-deps --dest /tmp "vosk==${VOSK_NATIVE_VERSION}" \
     && mkdir -p /out \
-    && cp "$(python -c 'import pathlib, vosk; print(pathlib.Path(vosk.__file__).parent / "libvosk.so")')" /out/libvosk.so
+    && python -c "import glob, zipfile; wheel = glob.glob('/tmp/vosk-*.whl')[0]; open('/out/libvosk.so', 'wb').write(zipfile.ZipFile(wheel).read('vosk/libvosk.so'))"
 
 FROM maven:3.9.9-eclipse-temurin-21 AS builder
 WORKDIR /workspace
