@@ -1,0 +1,31 @@
+version: '3.7'
+
+services:
+  app_proxy:
+    environment:
+      APP_HOST: myyuyin-assistant_server_1
+      APP_PORT: 8080
+      PROXY_AUTH_ADD: "false"
+
+  server:
+    platform: ${DOCKER_PLATFORM:-linux/arm64}
+    image: ${APP_SERVER_IMAGE:-ghcr.io/your-account/myyuyin-assistant-server:1.0.0}
+    restart: unless-stopped
+    environment:
+      DB_HOST: ${DB_HOST:?DB_HOST required}
+      DB_PORT: ${DB_PORT:-3306}
+      DB_NAME: ${DB_NAME:-myyuyinzhushou}
+      DB_USER: ${DB_USER:?DB_USER required}
+      DB_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD required}
+      SERVER_PORT: 8080
+      VOSK_MODEL_PATH: /opt/vosk-model-small-cn
+      TTS_OUTPUT_DIR: /tmp/myyuyin-tts
+      ALLOWED_ORIGINS: "*"
+    tmpfs:
+      - /tmp/myyuyin-tts
+    healthcheck:
+      test: ["CMD-SHELL", "test -f /opt/vosk-native/libvosk.so && curl -fsS http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 5s
+      start_period: 30s
+      retries: 3

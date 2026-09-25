@@ -1,0 +1,28 @@
+manifestVersion: 1
+id: myyuyin-assistant
+category: automation
+name: 语音交互助手
+version: "1.0.0"
+releaseNotes: >-
+  首个版本：离线中文语音识别、离线语音合成、语音唤醒、时间查询、
+  循环闹钟、客户端运行监控与数据库参数调整。服务端不依赖 LLM 或 Ollama。
+tagline: 离线语音识别、播报与循环闹钟
+description: >-
+  三角洲语音交互助手由 Java 服务端和客户端组成。
+
+
+  服务端部署在 ARM64 树莓派 Umbrel，负责 Vosk 离线语音识别、eSpeak NG 语音合成、
+  MySQL 持久化、手工命令解析、循环闹钟和实时事件推送。
+
+
+  客户端运行在有麦克风的电脑上，负责录音、播放、运行状态监控、参数调整和实时报警提示。
+developer: MyYuyin
+website: https://github.com/your-account/myyuyin-assistant
+dependencies: []
+repo: https://github.com/your-account/myyuyin-assistant
+support: https://github.com/your-account/myyuyin-assistant/issues
+port: 8080
+gallery: []
+path: ""
+defaultUsername: ""
+defaultPassword: ""

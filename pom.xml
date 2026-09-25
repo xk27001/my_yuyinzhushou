@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.4.5</version>
+        <relativePath/>
+    </parent>
+
+    <groupId>com.myyuyin</groupId>
+    <artifactId>myyuyin-assistant</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+    <name>MyYuyin Assistant</name>
+    <description>Offline Java voice interaction assistant with a server/client architecture.</description>
+
+    <modules>
+        <module>assistant-common</module>
+        <module>assistant-server</module>
+        <module>assistant-client</module>
+    </modules>
+
+    <properties>
+        <java.version>21</java.version>
+        <maven.compiler.release>21</maven.compiler.release>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <vosk.version>0.3.45</vosk.version>
+        <java-websocket.version>1.5.7</java-websocket.version>
+        <flatlaf.version>3.5.4</flatlaf.version>
+        <maven-plugin-annotations.version>3.13.1</maven-plugin-annotations.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.myyuyin</groupId>
+                <artifactId>assistant-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.maven.plugin-tools</groupId>
+                <artifactId>maven-plugin-annotations</artifactId>
+                <version>${maven-plugin-annotations.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alphacephei</groupId>
+                <artifactId>vosk</artifactId>
+                <version>${vosk.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.java-websocket</groupId>
+                <artifactId>Java-WebSocket</artifactId>
+                <version>${java-websocket.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.formdev</groupId>
+                <artifactId>flatlaf</artifactId>
+                <version>${flatlaf.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>

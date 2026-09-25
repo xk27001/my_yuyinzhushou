@@ -1,0 +1,27 @@
+services:
+  assistant-server:
+    platform: ${DOCKER_PLATFORM:-linux/arm64}
+    image: ${APP_SERVER_IMAGE:-ghcr.io/your-account/myyuyin-assistant-server:1.0.0}
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: myyuyin-assistant-server
+    restart: unless-stopped
+    environment:
+      DB_HOST: ${DB_HOST:?DB_HOST required}
+      DB_PORT: ${DB_PORT:-3306}
+      DB_NAME: ${DB_NAME:-myyuyinzhushou}
+      DB_USER: ${DB_USER:?DB_USER required}
+      DB_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD required}
+      SERVER_PORT: 8080
+      VOSK_MODEL_PATH: /opt/vosk-model-small-cn
+      TTS_OUTPUT_DIR: /tmp/myyuyin-tts
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-*}
+    ports:
+      - "${SERVER_PORT:-8080}:8080"
+    healthcheck:
+      test: ["CMD-SHELL", "test -f /opt/vosk-native/libvosk.so && curl -fsS http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 5s
+      start_period: 30s
+      retries: 3
