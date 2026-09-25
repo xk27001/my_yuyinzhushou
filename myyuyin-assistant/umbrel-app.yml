@@ -3,7 +3,7 @@ id: myyuyin-assistant
 name: 语音交互助手
 tagline: 离线语音识别、播报与循环闹钟
 category: automation
-version: "1.0.1"
+version: "1.0.2"
 port: 8080
 description: >-
   三角洲语音交互助手由 Java 服务端和客户端组成。
@@ -23,7 +23,7 @@ support: https://github.com/xk27001/my_yuyinzhushou/issues
 icon: https://github.com/xk27001/my_yuyinzhushou/raw/main/myyuyin-assistant/icon.svg
 gallery: []
 releaseNotes: >-
-  1.0.1：增加 Umbrel 社区应用商店清单元数据，并适配树莓派 ARM64 Vosk 原生库。
+  1.0.2：修复 Umbrel 2.0 镜像引用和应用代理变量，改用内置 MySQL 8.4，树莓派可一键安装。
 dependencies: []
 path: ""
 defaultUsername: ""

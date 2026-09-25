@@ -136,14 +136,14 @@ client.name=客厅电脑
 树莓派 Umbrel 使用 ARM64。Dockerfile 在镜像构建阶段从与 Java 端相同版本的 Vosk 0.3.45 ARM64 wheel 中提取 `libvosk.so`，并通过 JNA 加载，不需要修改 Java 识别代码。发布脚本默认构建 `linux/arm64`：
 
 ```powershell
-.\scripts\publish-umbrel.ps1 -Image ghcr.io/你的账号/myyuyin-assistant-server:1.0.1
+.\scripts\publish-umbrel.ps1 -Image ghcr.io/你的账号/myyuyin-assistant-server:1.0.2
 ```
 
 该脚本使用 Docker Buildx 构建 `linux/arm64` 并推送到镜像仓库。在 x86 电脑上构建 ARM64 镜像时，Docker Desktop/Buildx 需要启用 QEMU；直接在树莓派上构建最稳妥。当前工作机如果没有 Docker，需要先在安装 Docker 的树莓派或构建机执行该命令。
 
 ### 2. 准备 Umbrel 应用目录
 
-仓库根目录已经包含 `umbrel-app-store.yml`，应用位于 `myyuyin-assistant/`。在 Umbrel 的“应用商店设置”中添加仓库地址 `https://github.com/xk27001/my_yuyinzhushou` 即可识别；发布镜像后把 `myyuyin-assistant/docker-compose.yml` 中的默认镜像改为真实地址。`myyuyin-assistant/.env.example` 是应用目录内的数据库配置模板。
+仓库根目录已经包含 `umbrel-app-store.yml`，应用位于 `myyuyin-assistant/`。在 Umbrel 的“应用商店设置”中添加仓库地址 `https://github.com/xk27001/my_yuyinzhushou` 即可识别。Umbrel 版内置 MySQL 8.4，使用系统生成的 `APP_PASSWORD`，不需要配置外部数据库。
 
 如镜像使用私有仓库，需要在 Umbrel 上执行 `docker login`。MySQL 仍使用你提供的阿里云 RDS，不需要在 Umbrel 内运行数据库。
 
@@ -152,7 +152,7 @@ client.name=客厅电脑
 在 Umbrel 的对应应用目录执行：
 
 ```bash
-export APP_SERVER_IMAGE=ghcr.io/你的账号/myyuyin-assistant-server:1.0.1
+export APP_SERVER_IMAGE=ghcr.io/你的账号/myyuyin-assistant-server:1.0.2
 docker compose up -d
 ```
 
@@ -220,6 +220,6 @@ WS   /ws/devices?deviceCode={deviceCode}
 
 ## 安全说明
 
-数据库连接信息只保存在本地 `.env` 和 `myyuyin-assistant/.env`，这两个文件已被 `.gitignore` 忽略。仓库只提交 `.env.example` 占位模板，不包含真实口令。正式部署时建议使用部署平台的 Secret 管理能力，并定期轮换数据库密码。
+本地开发使用的数据库连接信息只保存在 `.env`，该文件已被 `.gitignore` 忽略；仓库只提交 `.env.example` 占位模板。Umbrel 商店版使用内置 MySQL 8.4，数据库密码由 Umbrel 自动生成并保存在本机应用设置中。
 
 客户端只保留连接地址、设备编号和客户端名称作为引导配置；业务参数都来自数据库。

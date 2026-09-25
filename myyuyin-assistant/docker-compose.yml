@@ -3,20 +3,43 @@ version: '3.7'
 services:
   app_proxy:
     environment:
-      APP_HOST: myyuyin-assistant_server_1
-      APP_PORT: 8080
+      APP_HOST: $APP_MYYUYIN_ASSISTANT_HOST
+      APP_PORT: $APP_MYYUYIN_ASSISTANT_PORT
       PROXY_AUTH_ADD: "false"
 
-  server:
-    platform: ${DOCKER_PLATFORM:-linux/arm64}
-    image: ${APP_SERVER_IMAGE:-ghcr.io/your-account/myyuyin-assistant-server:1.0.1}
+  db:
+    image: mysql:8.4
+    user: "1000:1000"
     restart: unless-stopped
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_0900_ai_ci
     environment:
-      DB_HOST: ${DB_HOST:?DB_HOST required}
-      DB_PORT: ${DB_PORT:-3306}
-      DB_NAME: ${DB_NAME:-myyuyinzhushou}
-      DB_USER: ${DB_USER:?DB_USER required}
-      DB_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD required}
+      MYSQL_DATABASE: myyuyinzhushou
+      MYSQL_USER: myyuyin
+      MYSQL_PASSWORD: $APP_PASSWORD
+      MYSQL_ROOT_PASSWORD: $APP_PASSWORD
+    volumes:
+      - ${APP_DATA_DIR}/data/mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u root -p$${MYSQL_ROOT_PASSWORD} --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+
+  server:
+    image: ghcr.io/xk27001/myyuyin-assistant-server:1.0.2
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_NAME: myyuyinzhushou
+      DB_USER: myyuyin
+      DB_PASSWORD: $APP_PASSWORD
       SERVER_PORT: 8080
       VOSK_MODEL_PATH: /opt/vosk-model-small-cn
       TTS_OUTPUT_DIR: /tmp/myyuyin-tts
