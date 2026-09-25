@@ -1,7 +1,7 @@
 services:
   assistant-server:
     platform: ${DOCKER_PLATFORM:-linux/arm64}
-    image: ${APP_SERVER_IMAGE:-ghcr.io/your-account/myyuyin-assistant-server:1.0.0}
+    image: ${APP_SERVER_IMAGE:-ghcr.io/your-account/myyuyin-assistant-server:1.0.1}
     build:
       context: .
       dockerfile: docker/Dockerfile

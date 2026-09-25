@@ -1,12 +1,10 @@
 manifestVersion: 1
 id: myyuyin-assistant
-category: automation
 name: 语音交互助手
-version: "1.0.0"
-releaseNotes: >-
-  首个版本：离线中文语音识别、离线语音合成、语音唤醒、时间查询、
-  循环闹钟、客户端运行监控与数据库参数调整。服务端不依赖 LLM 或 Ollama。
 tagline: 离线语音识别、播报与循环闹钟
+category: automation
+version: "1.0.1"
+port: 8080
 description: >-
   三角洲语音交互助手由 Java 服务端和客户端组成。
 
@@ -16,13 +14,18 @@ description: >-
 
 
   客户端运行在有麦克风的电脑上，负责录音、播放、运行状态监控、参数调整和实时报警提示。
-developer: MyYuyin
-website: https://github.com/your-account/myyuyin-assistant
-dependencies: []
-repo: https://github.com/your-account/myyuyin-assistant
-support: https://github.com/your-account/myyuyin-assistant/issues
-port: 8080
+developer: xk27001
+website: https://github.com/xk27001/my_yuyinzhushou
+submitter: xk27001
+submission: https://github.com/xk27001/my_yuyinzhushou
+repo: https://github.com/xk27001/my_yuyinzhushou
+support: https://github.com/xk27001/my_yuyinzhushou/issues
+icon: https://github.com/xk27001/my_yuyinzhushou/raw/main/myyuyin-assistant/icon.svg
 gallery: []
+releaseNotes: >-
+  1.0.1：增加 Umbrel 社区应用商店清单元数据，并适配树莓派 ARM64 Vosk 原生库。
+dependencies: []
 path: ""
 defaultUsername: ""
 defaultPassword: ""
+deterministicPassword: false

@@ -22,4 +22,4 @@ if ($LASTEXITCODE -ne 0) {
     throw '镜像构建或推送失败。'
 }
 Write-Host "镜像已推送: $Image"
-Write-Host "将 umbrel/docker-compose.yml 中的 APP_SERVER_IMAGE 设置为该地址，再提交到你的 Umbrel 应用仓库。该脚本默认只构建树莓派使用的 linux/arm64。"
+Write-Host "将 myyuyin-assistant/docker-compose.yml 中的 APP_SERVER_IMAGE 设置为该地址，再提交到你的 Umbrel 应用仓库。该脚本默认只构建树莓派使用的 linux/arm64。"

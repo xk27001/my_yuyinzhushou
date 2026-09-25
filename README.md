@@ -27,7 +27,8 @@ assistant-common/  公共请求和响应对象
 assistant-server/  Spring Boot 服务端、Vosk、TTS、MySQL、WebSocket
 assistant-client/  Swing 客户端、录音、播放、参数监控
 docker/            多架构镜像 Dockerfile
-umbrel/             Umbrel 应用清单和 docker-compose.yml
+umbrel-app-store.yml  Umbrel 社区商店清单
+myyuyin-assistant/    Umbrel 应用清单、图标和 docker-compose.yml
 scripts/            构建、运行、建库和 Umbrel 镜像发布脚本
 ```
 
@@ -130,19 +131,19 @@ client.name=客厅电脑
 
 ## Umbrel 部署
 
-### 1. 构建并推送多架构镜像
+### 1. 构建并推送 ARM64 镜像
 
 树莓派 Umbrel 使用 ARM64。Dockerfile 在镜像构建阶段从与 Java 端相同版本的 Vosk 0.3.45 ARM64 wheel 中提取 `libvosk.so`，并通过 JNA 加载，不需要修改 Java 识别代码。发布脚本默认构建 `linux/arm64`：
 
 ```powershell
-.\scripts\publish-umbrel.ps1 -Image ghcr.io/你的账号/myyuyin-assistant-server:1.0.0
+.\scripts\publish-umbrel.ps1 -Image ghcr.io/你的账号/myyuyin-assistant-server:1.0.1
 ```
 
 该脚本使用 Docker Buildx 构建 `linux/arm64` 并推送到镜像仓库。在 x86 电脑上构建 ARM64 镜像时，Docker Desktop/Buildx 需要启用 QEMU；直接在树莓派上构建最稳妥。当前工作机如果没有 Docker，需要先在安装 Docker 的树莓派或构建机执行该命令。
 
 ### 2. 准备 Umbrel 应用目录
 
-将 `umbrel` 目录放入你的 Umbrel 应用仓库，并把 `umbrel-app.yml` 和 `docker-compose.yml` 中的 GitHub 地址、镜像地址改为真实值。
+仓库根目录已经包含 `umbrel-app-store.yml`，应用位于 `myyuyin-assistant/`。在 Umbrel 的“应用商店设置”中添加仓库地址 `https://github.com/xk27001/my_yuyinzhushou` 即可识别；发布镜像后把 `myyuyin-assistant/docker-compose.yml` 中的默认镜像改为真实地址。`myyuyin-assistant/.env.example` 是应用目录内的数据库配置模板。
 
 如镜像使用私有仓库，需要在 Umbrel 上执行 `docker login`。MySQL 仍使用你提供的阿里云 RDS，不需要在 Umbrel 内运行数据库。
 
@@ -151,7 +152,7 @@ client.name=客厅电脑
 在 Umbrel 的对应应用目录执行：
 
 ```bash
-export APP_SERVER_IMAGE=ghcr.io/你的账号/myyuyin-assistant-server:1.0.0
+export APP_SERVER_IMAGE=ghcr.io/你的账号/myyuyin-assistant-server:1.0.1
 docker compose up -d
 ```
 
@@ -219,6 +220,6 @@ WS   /ws/devices?deviceCode={deviceCode}
 
 ## 安全说明
 
-数据库连接信息只保存在本地 `.env` 和 `umbrel/.env`，这两个文件已被 `.gitignore` 忽略。仓库只提交 `.env.example` 占位模板，不包含真实口令。正式部署时建议使用部署平台的 Secret 管理能力，并定期轮换数据库密码。
+数据库连接信息只保存在本地 `.env` 和 `myyuyin-assistant/.env`，这两个文件已被 `.gitignore` 忽略。仓库只提交 `.env.example` 占位模板，不包含真实口令。正式部署时建议使用部署平台的 Secret 管理能力，并定期轮换数据库密码。
 
 客户端只保留连接地址、设备编号和客户端名称作为引导配置；业务参数都来自数据库。
